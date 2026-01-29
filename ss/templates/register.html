@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="auth-container fade-in-up">
+    <div id="particles-js"></div>
+    <div class="auth-card">
+        <h2 class="title-glow">Register</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <input type="text" name="username" class="neon-input" placeholder="Username" required>
+            </div>
+            <div class="mb-3">
+                <input type="email" name="email" class="neon-input" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" class="neon-input" placeholder="Password" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="confirm_password" class="neon-input" placeholder="Confirm Password" required>
+            </div>
+            <button class="btn-neon" type="submit">Register</button>
+        </form>
+        <p class="switch-text">
+            Already have an account?
+            <a href="{{ url_for('login') }}" class="link-glow">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Track Product{% endblock %}
+
+{% block content %}
+<section class="track-product-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold">Track a New Product</h2>
+                    <p class="text-muted">Paste a product URL from Amazon or Flipkart to start tracking</p>
+                </div>
+                
+                <div class="track-card card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+                        <form method="POST" action="{{ url_for('track_product') }}" id="trackForm">
+                            <div class="mb-4">
+                                <label class="form-label fw-medium">Product URL</label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-link-45deg text-muted"></i>
+                                    </span>
+                                    <input type="text" name="product_url" class="form-control border-start-0 ps-0" 
+                                           placeholder="Paste Amazon or Flipkart product link here..." 
+                                           required id="productUrl">
+                                </div>
+                                <div class="form-text mt-2">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Just copy the product URL from your browser and paste it here. We'll handle the rest!
+                                </div>
+                            </div>
+                            
+                            <div class="supported-platforms mb-4">
+                                <p class="text-muted mb-2">Supported platforms:</p>
+                                <div class="d-flex gap-3">
+                                    <div class="platform-badge">
+                                        <i class="bi bi-check-circle text-success me-1"></i>
+                                        Amazon India
+                                    </div>
+                                    <div class="platform-badge">
+                                        <i class="bi bi-check-circle text-success me-1"></i>
+                                        Flipkart
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-lg w-100" id="submitBtn">
+                                <i class="bi bi-search me-2"></i>Track Product
+                            </button>
+                        </form>
+                        
+                        <div id="loadingState" class="text-center py-4 d-none">
+                            <div class="spinner-border text-primary mb-3" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="text-muted mb-0">Fetching product details...</p>
+                            <small class="text-muted">This may take a few moments</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tips-section mt-5">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-lightbulb me-2 text-warning"></i>Tips</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="tip-card p-3 bg-light rounded-3">
+                                <h6 class="fw-medium mb-2">Copy the full URL</h6>
+                                <p class="text-muted mb-0 small">Make sure to copy the complete product page URL, not the search results page.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="tip-card p-3 bg-light rounded-3">
+                                <h6 class="fw-medium mb-2">Product variations</h6>
+                                <p class="text-muted mb-0 small">Select the specific variant (size, color) before copying the URL.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('trackForm').addEventListener('submit', function() {
+    document.getElementById('submitBtn').classList.add('d-none');
+    document.getElementById('loadingState').classList.remove('d-none');
+});
+</script>
+{% endblock %}

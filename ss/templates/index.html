@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION WITH PARTICLES BACKGROUND ================= -->
+<section class="premium-hero fade-in-up position-relative">
+    <div id="particles-js" class="particles-bg"></div>
+
+    <div class="hero-content text-center">
+        <h1 class="title-glow">Track Prices. Save Smart.</h1>
+        <p class="subtitle">Live Amazon & Flipkart price monitoring with alerts and insights.</p>
+
+        <div class="cta-btns mt-4">
+            <a href="{{ url_for('register') }}" class="btn btn-neon">Get Started</a>
+            <a href="{{ url_for('track_product') }}" class="btn btn-outline-neon">Track Product</a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= FEATURE SECTION ================= -->
+<section id="features" class="features-section py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Why Choose PriceTracker?</h2>
+            <p class="lead text-muted">Powerful features to help you save money on every purchase</p>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded-4 shadow-sm">
+                    <div class="feature-icon bg-gradient-primary text-white rounded-circle mb-4">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </div>
+                    <h5 class="fw-bold">Real-time Comparison</h5>
+                    <p class="text-muted">Compare Amazon vs Flipkart instantly & buy smart.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded-4 shadow-sm">
+                    <div class="feature-icon bg-gradient-success text-white rounded-circle mb-4">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <h5 class="fw-bold">Price History Charts</h5>
+                    <p class="text-muted">See price trends & decide the best time to purchase.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded-4 shadow-sm">
+                    <div class="feature-icon bg-gradient-warning text-white rounded-circle mb-4">
+                        <i class="bi bi-bell"></i>
+                    </div>
+                    <h5 class="fw-bold">Price Drop Alerts</h5>
+                    <p class="text-muted">Set alerts & get notified when price falls.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded-4 shadow-sm">
+                    <div class="feature-icon bg-gradient-info text-white rounded-circle mb-4">
+                        <i class="bi bi-link-45deg"></i>
+                    </div>
+                    <h5 class="fw-bold">Easy Product Tracking</h5>
+                    <p class="text-muted">Paste URL, we auto-fetch details instantly.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded-4 shadow-sm">
+                    <div class="feature-icon bg-gradient-danger text-white rounded-circle mb-4">
+                        <i class="bi bi-cart-check"></i>
+                    </div>
+                    <h5 class="fw-bold">Quick Buy Links</h5>
+                    <p class="text-muted">Direct buy links for both sites.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100 p-4 rounded-4 shadow-sm">
+                    <div class="feature-icon bg-gradient-secondary text-white rounded-circle mb-4">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h5 class="fw-bold">Secure & Private</h5>
+                    <p class="text-muted">Your data is safe & never shared.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="how-it-works py-5 bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">How It Works</h2>
+            <p class="lead text-muted">Start saving money in just 3 simple steps</p>
+        </div>
+
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="step-card p-4">
+                    <div class="step-number">1</div>
+                    <h5 class="fw-bold mt-3">Create Account</h5>
+                    <p class="text-muted">Signup free, no card required.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="step-card p-4">
+                    <div class="step-number">2</div>
+                    <h5 class="fw-bold mt-3">Add Products</h5>
+                    <p class="text-muted">Paste URL & start tracking instantly.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="step-card p-4">
+                    <div class="step-number">3</div>
+                    <h5 class="fw-bold mt-3">Save Money</h5>
+                    <p class="text-muted">Compare & buy at the lowest price.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ================= CTA SECTION ================= -->
+<section class="cta-section py-5">
+    <div class="container text-center py-4">
+        <h2 class="fw-bold text-white">Ready to Start Saving?</h2>
+        <p class="text-white-50">Join shoppers who save daily with PriceTracker.</p>
+
+        <a href="{{ url_for('register') }}" class="btn btn-light btn-lg mt-3 px-5">
+            <i class="bi bi-rocket-takeoff me-2"></i>Get Started Free
+        </a>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% block title %}{{ product.product_name[:50] }}{% endblock %}
+
+{% block content %}
+<section class="product-detail-section py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li class="breadcrumb-item active">Product Details</li>
+            </ol>
+        </nav>
+        
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="product-image-card card border-0 shadow-sm rounded-4 overflow-hidden" style="background-color: #ffffff;">
+                    {% if product.product_image %}
+                    <div class="p-4" style="background-color: #ffffff;">
+                        <img src="{{ product.product_image }}" class="img-fluid" alt="{{ product.product_name }}" style="max-height: 400px; width: 100%; object-fit: contain;">
+                    </div>
+                    {% else %}
+                    <div class="no-image-large d-flex align-items-center justify-content-center" style="height: 400px; background-color: #ffffff;">
+                        <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-lg-7">
+                <div class="product-info">
+                    <h2 class="fw-bold mb-3">{{ product.product_name }}</h2>
+                    
+                    <div class="price-comparison-detail mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="price-card amazon h-100 p-4 rounded-4 {% if product.amazon_price and product.flipkart_price and product.amazon_price <= product.flipkart_price %}best-deal{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-0" style="color: #94a3b8;">Amazon</h6>
+                                        {% if product.amazon_price and product.flipkart_price and product.amazon_price < product.flipkart_price %}
+                                        <span class="badge bg-success">Best Price</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if product.amazon_price %}
+                                    <div class="price-display mb-2">
+                                        <span class="current-price">₹{{ "{:,.0f}".format(product.amazon_price) }}</span>
+                                        {% if product.amazon_original_price and product.amazon_original_price > product.amazon_price %}
+                                        <span class="original-price">₹{{ "{:,.0f}".format(product.amazon_original_price) }}</span>
+                                        <span class="discount-badge">{{ ((product.amazon_original_price - product.amazon_price) / product.amazon_original_price * 100)|int }}% OFF</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if product.amazon_url %}
+                                    <a href="{{ product.amazon_url }}" target="_blank" class="btn btn-amazon w-100">
+                                        <i class="bi bi-cart-check me-2"></i>Buy on Amazon
+                                    </a>
+                                    {% endif %}
+                                    {% else %}
+                                    <p class="text-muted mb-0">Not available</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="price-card flipkart h-100 p-4 rounded-4 {% if product.amazon_price and product.flipkart_price and product.flipkart_price < product.amazon_price %}best-deal{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-0" style="color: #94a3b8;">Flipkart</h6>
+                                        {% if product.amazon_price and product.flipkart_price and product.flipkart_price < product.amazon_price %}
+                                        <span class="badge bg-primary">Best Price</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if product.flipkart_price %}
+                                    <div class="price-display mb-2">
+                                        <span class="current-price">₹{{ "{:,.0f}".format(product.flipkart_price) }}</span>
+                                        {% if product.flipkart_original_price and product.flipkart_original_price > product.flipkart_price %}
+                                        <span class="original-price">₹{{ "{:,.0f}".format(product.flipkart_original_price) }}</span>
+                                        <span class="discount-badge">{{ ((product.flipkart_original_price - product.flipkart_price) / product.flipkart_original_price * 100)|int }}% OFF</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if product.flipkart_url %}
+                                    <a href="{{ product.flipkart_url }}" target="_blank" class="btn btn-flipkart w-100">
+                                        <i class="bi bi-cart-check me-2"></i>Buy on Flipkart
+                                    </a>
+                                    {% endif %}
+                                    {% else %}
+                                    <p class="text-muted mb-0">Not available</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if product.amazon_price and product.flipkart_price %}
+                    <div class="savings-info mb-4 p-3 bg-light rounded-3">
+                        {% set price_diff = (product.amazon_price - product.flipkart_price)|abs %}
+                        {% if product.amazon_price < product.flipkart_price %}
+                        <p class="mb-0"><i class="bi bi-piggy-bank me-2 text-success"></i>Save <strong class="text-success">₹{{ "{:,.0f}".format(price_diff) }}</strong> by buying on Amazon!</p>
+                        {% elif product.flipkart_price < product.amazon_price %}
+                        <p class="mb-0"><i class="bi bi-piggy-bank me-2 text-primary"></i>Save <strong class="text-primary">₹{{ "{:,.0f}".format(price_diff) }}</strong> by buying on Flipkart!</p>
+                        {% else %}
+                        <p class="mb-0"><i class="bi bi-equals me-2"></i>Prices are the same on both platforms</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="refresh-section mb-4">
+                        <button class="btn btn-outline-secondary" id="refreshBtn" onclick="refreshPrices({{ product.id }})">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh Prices
+                        </button>
+                        <small class="text-muted ms-2">Last updated: {{ product.updated_at.strftime('%b %d, %Y at %I:%M %p') }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="chart-card card border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-transparent border-0 p-4">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-graph-up me-2"></i>Price History (Last 3 Months)</h5>
+                    </div>
+                    <div class="card-body p-4 pt-0">
+                        <canvas id="priceChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-lg-6">
+                <div class="alert-card card border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-transparent border-0 p-4">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-bell me-2"></i>Set Price Alert</h5>
+                    </div>
+                    <div class="card-body p-4 pt-0">
+                        <form method="POST" action="{{ url_for('set_alert') }}">
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Target Price (₹)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" name="target_price" class="form-control" 
+                                           placeholder="Enter your target price" required min="1" step="1"
+                                           value="{{ ((product.amazon_price or product.flipkart_price or 1000) * 0.9)|int }}">
+                                </div>
+                                <small class="text-muted">We'll notify you when the price drops to or below this amount</small>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">Platform</label>
+                                <select name="platform" class="form-select">
+                                    <option value="both">Both (Amazon & Flipkart)</option>
+                                    <option value="amazon">Amazon Only</option>
+                                    <option value="flipkart">Flipkart Only</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-warning w-100">
+                                <i class="bi bi-bell-fill me-2"></i>Set Price Alert
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                <div class="active-alerts-card card border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-transparent border-0 p-4">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-bell-slash me-2"></i>Active Alerts</h5>
+                    </div>
+                    <div class="card-body p-4 pt-0">
+                        {% if alerts %}
+                        <div class="list-group list-group-flush">
+                            {% for alert in alerts %}
+                            <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-{{ 'warning' if alert.platform == 'both' else ('success' if alert.platform == 'amazon' else 'primary') }} me-2">
+                                        {{ alert.platform|capitalize }}
+                                    </span>
+                                    <strong>₹{{ "{:,.0f}".format(alert.target_price) }}</strong>
+                                </div>
+                                <form action="{{ url_for('delete_alert', alert_id=alert.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete alert">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">No active alerts for this product</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let priceChart;
+
+async function loadPriceHistory() {
+    try {
+        const response = await fetch('/api/price-history/{{ product.id }}');
+        const data = await response.json();
+        
+        const labels = data.map(item => item.date);
+        const amazonPrices = data.map(item => item.amazon_price);
+        const flipkartPrices = data.map(item => item.flipkart_price);
+        
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        
+        priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Amazon',
+                        data: amazonPrices,
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Flipkart',
+                        data: flipkartPrices,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ₹' + context.raw.toLocaleString('en-IN');
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            callback: function(value) {
+                                return '₹' + value.toLocaleString('en-IN');
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxTicksLimit: 10
+                        }
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error loading price history:', error);
+    }
+}
+
+async function refreshPrices(productId) {
+    const btn = document.getElementById('refreshBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Refreshing...';
+    
+    try {
+        const response = await fetch('/refresh-prices/' + productId, { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Could not refresh prices. Please try again.');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refresh Prices';
+        }
+    } catch (error) {
+        console.error('Error refreshing prices:', error);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refresh Prices';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadPriceHistory);
+</script>
+{% endblock %}

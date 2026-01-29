@@ -1,0 +1,28 @@
+
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="auth-container fade-in-up">
+    <div id="particles-js"></div>
+    <div class="auth-card">
+        <h2 class="title-glow">Login</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <input type="email" name="email" class="neon-input" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" class="neon-input" placeholder="Password" required>
+            </div>
+            <div class="mb-3 form-check text-start">
+                <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                <label class="form-check-label text-light" for="remember">Remember me</label>
+            </div>
+            <button class="btn-neon" type="submit">Login</button>
+        </form>
+        <p class="switch-text">
+            Don't have an account?
+            <a href="{{ url_for('register') }}" class="link-glow">Register</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

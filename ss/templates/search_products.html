@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Search Products{% endblock %}
+{% block content %}
+<section class="premium-hero fade-in-up position-relative">
+    <div id="particles-js" class="particles-bg"></div>
+    <div class="hero-content text-center">
+        <h2 class="title-glow">Search Amazon & Flipkart</h2>
+        <p class="subtitle">Type a product name and see top results from both platforms.</p>
+        <form method="POST" class="mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6 d-flex">
+                    <input type="text" name="query" class="neon-input flex-grow-1" placeholder="e.g. iPhone 15, Boat headphones" value="{{ query or '' }}" required>
+                    <button class="btn-neon ms-2" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="features-section py-5">
+    <div class="container">
+        {% if query and (amazon_results or flipkart_results) %}
+        <div class="text-center mb-4">
+            <h5 class="fw-bold text-light">Results for "{{ query }}"</h5>
+            <p class="text-muted small">Showing {{ amazon_results|length }} Amazon and {{ flipkart_results|length }} Flipkart products</p>
+        </div>
+        <div class="row g-4 premium-search-grid">
+            <div class="col-lg-6">
+                <h6 class="text-warning mb-3"><i class="bi bi-amazon me-1"></i>Amazon</h6>
+                {% if amazon_results %}
+                <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-xl-3">
+                    {% for item in amazon_results %}
+                    <div class="col">
+                        <div class="product-card h-100 p-3 rounded-4 shadow-premium">
+                            {% if item.image %}
+                            <div class="product-image mb-2 text-center">
+                                <img src="{{ item.image }}" alt="{{ item.name }}" style="max-height: 140px; max-width: 100%; object-fit: contain;">
+                            </div>
+                            {% endif %}
+                            <div class="product-name mb-1 small text-truncate" title="{{ item.name }}">{{ item.name }}</div>
+                            {% if item.price %}
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <span class="fw-bold text-success">₹{{ '%.2f'|format(item.price) }}</span>
+                                <span class="badge bg-dark-subtle text-uppercase small">Prime</span>
+                            </div>
+                            {% endif %}
+                            <a href="{{ item.url }}" target="_blank" class="btn btn-sm btn-outline-neon mt-3 w-100">View on Amazon</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted small">No Amazon results.</p>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <h6 class="text-primary mb-3"><i class="bi bi-bag me-1"></i>Flipkart</h6>
+                {% if flipkart_results %}
+                <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-xl-3">
+                    {% for item in flipkart_results %}
+                    <div class="col">
+                        <div class="product-card h-100 p-3 rounded-4 shadow-premium">
+                            {% if item.image %}
+                            <div class="product-image mb-2 text-center">
+                                <img src="{{ item.image }}" alt="{{ item.name }}" style="max-height: 140px; max-width: 100%; object-fit: contain;">
+                            </div>
+                            {% endif %}
+                            <div class="product-name mb-1 small text-truncate" title="{{ item.name }}">{{ item.name }}</div>
+                            {% if item.price %}
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <span class="fw-bold text-success">₹{{ '%.2f'|format(item.price) }}</span>
+                                <span class="badge bg-primary-subtle text-uppercase small">Best Deal</span>
+                            </div>
+                            {% endif %}
+                            <a href="{{ item.url }}" target="_blank" class="btn btn-sm btn-outline-neon mt-3 w-100">View on Flipkart</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted small">No Flipkart results.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% elif query %}
+        <div class="text-center">
+            <p class="text-muted">No results found for "{{ query }}".</p>
+        </div>
+        {% else %}
+        <div class="text-center text-muted">
+            <p>Start by searching for any product name above.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
